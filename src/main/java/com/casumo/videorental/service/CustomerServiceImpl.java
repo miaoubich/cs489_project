@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
 	private final RentalRepository rentalRepository;
 
 	@Override
-	public List<Customer> getAllCustomers(String token) {
+	public List<Customer> getAllCustomers() {
 		List<Customer> customers = customerRepository.findAll();
 		log.info("Customer List is being fetch from the database");
 

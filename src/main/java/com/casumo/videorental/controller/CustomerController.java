@@ -20,7 +20,6 @@ import com.casumo.videorental.model.Customer;
 import com.casumo.videorental.service.CustomerService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -51,9 +50,8 @@ public class CustomerController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Customer>> getAllCustomers(HttpServletRequest request) {
-		String token = request.getHeader("Authorization").replace("Bearer ", "");
-		List<Customer> customers = customerService.getAllCustomers(token);
+	public ResponseEntity<List<Customer>> getAllCustomers() {
+		List<Customer> customers = customerService.getAllCustomers();
 		return ResponseEntity.ok(customers);
 	}
 

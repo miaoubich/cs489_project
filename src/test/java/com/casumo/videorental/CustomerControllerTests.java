@@ -1,7 +1,10 @@
 package com.casumo.videorental;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -22,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.casumo.videorental.dto.CustomerRequest;
 import com.casumo.videorental.dto.CustomerResponse;
@@ -76,32 +80,31 @@ class CustomerControllerTests {
 				.andExpect(jsonPath("$.rentals", hasSize(rentals.size()))).andReturn();
 	}
 
-//	@Test
-//    public void  getCustomerByIdTest() throws Exception {
-//    	Customer customerResponse = buildCustomer();
-//    	
-//    	MvcResult actualResult = this.mockMvc.perform(get("/video-rental-store/api/v1/customer/{customerId}", customerResponse.getId()))
-//    				.andDo(print())
-//    				.andExpect(jsonPath("$.id").value(customerResponse.getId()))
-//    				.andExpect(jsonPath("$.firstName").value(customerResponse.getFirstName()))
-//    				.andExpect(jsonPath("$.lastName").value(customerResponse.getLastName()))
-//    				.andExpect(status().isFound())
-//    				.andReturn();
-//    	
-//    	// Extract response content as a String
-//        String responseContent = actualResult.getResponse().getContentAsString();
-//        
-//        // Parse the response content into a Customer object using ObjectMapper
-//        Customer actualCustomerResult = mapper.readValue(responseContent, Customer.class);
-//        Customer expectedCustomerResult = customerResponse;
-//        
-//        // Perform assertions on the extracted Customer object
-//        assertEquals(expectedCustomerResult.getId(), actualCustomerResult.getId());
-//        assertEquals(expectedCustomerResult.getFirstName(), actualCustomerResult.getFirstName());
-//        assertEquals(expectedCustomerResult.getLastName(), actualCustomerResult.getLastName());
-//        assertEquals(expectedCustomerResult.getRentals().size(), actualCustomerResult.getRentals().size());
-//    }
-//    
+	@Test
+	public void getCustomerByIdTest() throws Exception {
+		Customer customerResponse = buildCustomer();
+
+		MvcResult actualResult = this.mockMvc
+				.perform(get("/video-rental-store/api/v1/customer/{customerId}", customerResponse.getId()))
+				.andDo(print()).andExpect(jsonPath("$.id").value(customerResponse.getId()))
+				.andExpect(jsonPath("$.firstName").value(customerResponse.getFirstName()))
+				.andExpect(jsonPath("$.lastName").value(customerResponse.getLastName())).andExpect(status().isFound())
+				.andReturn();
+
+		// Extract response content as a String
+		String responseContent = actualResult.getResponse().getContentAsString();
+
+		// Parse the response content into a Customer object using ObjectMapper
+		Customer actualCustomerResult = mapper.readValue(responseContent, Customer.class);
+		Customer expectedCustomerResult = customerResponse;
+
+		// Perform assertions on the extracted Customer object
+		assertEquals(expectedCustomerResult.getId(), actualCustomerResult.getId());
+		assertEquals(expectedCustomerResult.getFirstName(), actualCustomerResult.getFirstName());
+		assertEquals(expectedCustomerResult.getLastName(), actualCustomerResult.getLastName());
+		assertEquals(expectedCustomerResult.getRentals().size(), actualCustomerResult.getRentals().size());
+	}
+
 	@Test
 	@WithMockUser
 	public void getAllCustomersTest() throws Exception {
@@ -127,36 +130,34 @@ class CustomerControllerTests {
 		this.mockMvc.perform(get("/video-rental-store/api/v1/customer")).andDo(print()).andExpect(status().isOk())
 				.andExpect(jsonPath("$.length()").value(1));
 	}
-//    
-//    @Test
-//    public void updateCustomerTest() throws Exception {
-//    	// Mocking the service response
-//        CustomerRequest customerRequest = buildCustomerRequest();
-//        List<RentalResponse> rentalResponses = rentalResponses();
-//        
-//        CustomerResponse updatedCustomerResponse = CustomerResponse.builder()
-//                .id(customerId)
-//                .firstName(customerRequest.getFirstName().concat(" [Updated]"))
-//                .lastName(customerRequest.getLastName().concat(" [Updated]"))
-//                .email(customerRequest.getEmail())
-//                .rentals(rentalResponses) // Assuming rentals are updated as well
-//                .build();
-//
-//    	when(customerService.updateCustomer(any(), any())).thenReturn(updatedCustomerResponse);
-//    	when(customerService.updateCustomer(customerId, customerRequest)).thenReturn(updatedCustomerResponse);
-//
-//    }
-//    
-//    @Test
-//    public void deleteCustomerTest() throws Exception {
-//    	// Verify that the service method was called with the correct customer ID
-//    	when(customerService.deleteCustomer(customerId)).thenReturn(true);
-//    	
-//    	 // Perform DELETE request to delete customer
-//    	mockMvc.perform(delete("/video-rental-store/api/v1/customer/{id}", customerId)
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNoContent());
-//    }
+
+	@Test
+	public void updateCustomerTest() throws Exception {
+		// Mocking the service response
+		CustomerRequest customerRequest = buildCustomerRequest();
+		List<RentalResponse> rentalResponses = rentalResponses();
+
+		CustomerResponse updatedCustomerResponse = CustomerResponse.builder().id(customerId)
+				.firstName(customerRequest.getFirstName().concat(" [Updated]"))
+				.lastName(customerRequest.getLastName().concat(" [Updated]")).email(customerRequest.getEmail())
+				.rentals(rentalResponses) // Assuming rentals are updated as well
+				.build();
+
+		when(customerService.updateCustomer(any(), any())).thenReturn(updatedCustomerResponse);
+		when(customerService.updateCustomer(customerId, customerRequest)).thenReturn(updatedCustomerResponse);
+
+	}
+
+	@Test
+    public void deleteCustomerTest() throws Exception {
+    	// Verify that the service method was called with the correct customer ID
+    	when(customerService.deleteCustomer(customerId)).thenReturn(true);
+    	
+    	 // Perform DELETE request to delete customer
+    	mockMvc.perform(delete("/video-rental-store/api/v1/customer/{id}", customerId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
 
 	public CustomerRequest buildCustomerRequest() {
 		return CustomerRequest.builder().id(customerId).firstName("Ali").lastName("Bouzar").email("ali@email.net")

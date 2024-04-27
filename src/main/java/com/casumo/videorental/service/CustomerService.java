@@ -8,7 +8,7 @@ import com.casumo.videorental.model.Customer;
 
 public interface CustomerService {
 
-	List<Customer> getAllCustomers(String token);
+	List<Customer> getAllCustomers();
 
 	CustomerResponse getCustomerById(Long customerId);
 

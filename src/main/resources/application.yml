@@ -1,0 +1,33 @@
+spring:
+  application.name: video-rental-store
+  
+  datasource:
+   url: jdbc:mysql://localhost:3306/videodb
+   username: root
+   password: password
+   driverClassName: com.mysql.cj.jdbc.Driver
+   
+  
+  # JPA/Hibernate Properties
+  jpa:
+   hibernate:
+    ddl-auto: update
+   show-sql: true
+   properties:
+    hibernate:
+     dialect: org.hibernate.dialect.MySQLDialect
+     
+#springdoc:
+ #swagger-ui:
+  #path: /swagger-ui.html
+     
+jwt:
+ SECRET: "80460e6dc563c9a95089562167668c93aafb6cd59177e78f71269872626cd504=\r\n"
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, heapdump, threaddump, loggers
+#      base-path: /
+      

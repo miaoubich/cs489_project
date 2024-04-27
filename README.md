@@ -29,6 +29,7 @@ This is a fully functional Java Spring Boot application is designed to manage 5 
 * IDE STS (Spring Tool Suite)
 * Postman API
 * Docker
+* Architecture Diagram
 * Class Diagram
 * UML Diagram
 * Swagger UI

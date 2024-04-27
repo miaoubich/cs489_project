@@ -30,10 +30,13 @@ public class JwtService {
 
 		// Build JWT token with claims, subject, issued time, expiration time, and
 		// signing algorithm
-		// Token valid for 3 minutes
-		return Jwts.builder().setClaims(claims).setSubject(userName).setIssuedAt(new Date(System.currentTimeMillis()))
+		// Token valid for 60 minutes
+		String token = Jwts.builder().setClaims(claims).setSubject(userName)
+				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) //
 				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+
+		return "Please use the following token in order to access the rest of the application endpoints: \n" + token;
 	}
 
 	private Key getSignKey() {

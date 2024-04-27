@@ -136,3 +136,52 @@ erDiagram
         int videoCopyId FK
     }
 ```
+
+### Architeture Diagram
+flowchart LR
+    subgraph "Client"
+        A[Web Browser/Mobile App] --> B[API Endpoints]
+    end
+
+    subgraph "Spring Boot Application"
+        C[Spring Security with JWT] --> D[Customer Module]
+        C --> E[Video Module]
+        C --> F[VideoCopy Module]
+        C --> G[Auth Module]
+    end
+
+    subgraph "Database"
+        H[MySQL Database]
+    end
+
+    subgraph "API Endpoints"
+        I[Customer API]
+        J[Video API]
+        K[VideoCopy API]
+        L[User API]
+    end
+
+    subgraph "Tools"
+        M[Postman]
+        N[Docker]
+    end
+
+    B -->|HTTP Requests| I
+    B -->|HTTP Requests| J
+    B -->|HTTP Requests| K
+    B -->|HTTP Requests| L
+
+    D -.-> H
+    E -.-> H
+    F -.-> H
+    G -.-> H
+
+    L -.-> H
+
+    M -->|Test API| I
+    M -->|Test API| J
+    M -->|Test API| K
+    M -->|Test API| L
+
+    N --> "Deployed Server/Cloud Platform"
+

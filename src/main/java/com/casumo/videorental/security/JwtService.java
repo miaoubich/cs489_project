@@ -8,7 +8,6 @@ import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +15,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-@CrossOrigin("http://localhost:3000")
+//@CrossOrigin("http://localhost:3000")
 @Component
 public class JwtService {
 
@@ -25,15 +24,15 @@ public class JwtService {
 //	@Value("${jwt.SECRET}")
 //	private static String SECRET;
 
-	public String generateToken(String userName) {
+	public String generateToken(String username) {
 		Map<String, Object> claims = new HashMap<>();
 
 		// Build JWT token with claims, subject, issued time, expiration time, and
 		// signing algorithm
-		// Token valid for 60 minutes
-		String token = Jwts.builder().setClaims(claims).setSubject(userName)
+		// Token valid for 10 minutes
+		String token = Jwts.builder().setClaims(claims).setSubject(username)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) //
+				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10)) //
 				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 
 		return "Please use the following token in order to access the rest of the application endpoints: \n" + token;

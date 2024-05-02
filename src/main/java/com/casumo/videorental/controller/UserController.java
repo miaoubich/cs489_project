@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,11 @@ public class UserController {
 	@Autowired
 	private JwtService jwtService;
 
+	@GetMapping("/get")
+	public String myName() {
+		return "Ali Bouzar";
+	}
+
 	@PostMapping("/register-user")
 	public ResponseEntity<String> registerUser(@RequestBody User user) {
 		log.info("Before register new USER!");
@@ -50,4 +56,7 @@ public class UserController {
 		} else
 			throw new UsernameNotFoundException("Invalid User or Password!");
 	}
+
+	// @formatter:on
+
 }

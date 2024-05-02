@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +18,14 @@ import com.casumo.videorental.dto.CustomerResponse;
 import com.casumo.videorental.model.Customer;
 import com.casumo.videorental.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin("http://localhost:3000")
+//@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/video-rental-store/api/v1/customer")
 @RequiredArgsConstructor
@@ -33,10 +35,21 @@ public class CustomerController {
 
 	private final CustomerService customerService;
 
+	@Operation(description = "Post Endpoint for Customer", summary = "This is a summary for Post customer endpoint", responses = {
+			@ApiResponse(description = "Created", responseCode = "201"),
+			@ApiResponse(description = "Unauthorized / Invalide Token", responseCode = "403"),
+
+	})
 	@PostMapping
 	public ResponseEntity<CustomerResponse> createCustomer(@RequestBody @Valid CustomerRequest customerRequest) {
 		CustomerResponse createdCustomer = customerService.createCustomer(customerRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
+	}
+
+	@Hidden // To hide this endpoint from Swagger UI
+	@GetMapping
+	public void hiddenRESTApiUsingSwagger() {
+
 	}
 
 	@GetMapping("/{customerId}")
